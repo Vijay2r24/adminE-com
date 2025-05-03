@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Tag, Info, Settings, Hash } from 'lucide-react';
+import { ArrowRight, Tag, Info, Settings, Hash } from 'lucide-react';
 
 const CreateAttributeType = ({ onBack }) => {
   const [formData, setFormData] = useState({
@@ -52,7 +52,7 @@ const CreateAttributeType = ({ onBack }) => {
           onClick={onBack}
           className="mr-4 p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
         >
-          <ArrowLeft className="h-5 w-5" />
+            <ArrowRight className="h-5 w-5" />
         </button>
         <h2 className="text-lg font-medium text-gray-900">Create Attribute Type</h2>
       </div>

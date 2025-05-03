@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Tag, Info, Palette } from 'lucide-react';
+import { ArrowLeft, Tag, Info, Palette, ArrowRight } from 'lucide-react';
 
 const CreateColor = ({ onBack }) => {
   const [formData, setFormData] = useState({
@@ -51,7 +51,7 @@ const CreateColor = ({ onBack }) => {
           onClick={onBack}
           className="mr-4 p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowRight className="h-5 w-5" />
         </button>
         <h2 className="text-lg font-medium text-gray-900">Create Color</h2>
       </div>

@@ -55,13 +55,6 @@ const AttributeList = () => {
     <div className="relative">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-medium text-gray-900">Attributes</h2>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#5B45E0] hover:bg-[#4c39c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Create Attribute
-        </button>
       </div>
 
       {/* Filters */}

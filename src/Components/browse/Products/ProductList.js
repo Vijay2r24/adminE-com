@@ -10,7 +10,7 @@ const mockProducts = [
     category: 'Accessories',
     price: 29.99,
     stock: 120,
-    image: 'https://images.unsplash.com/photo-1587829741301-dc798b82b5f9?w=80&h=80&fit=crop&auto=format', // Wireless mouse
+    image: 'https://images.unsplash.com/photo-1612810802412-b83e049ba16e?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80', // Better mouse image
   },
   {
     id: 'p2',
@@ -20,7 +20,7 @@ const mockProducts = [
     category: 'Accessories',
     price: 89.99,
     stock: 60,
-    image: 'https://images.unsplash.com/photo-1605902711622-cfb43c44367f?w=80&h=80&fit=crop&auto=format', // Mechanical keyboard
+    image: 'https://images.unsplash.com/photo-1587202372775-a7701a4e9c41?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80', // Better keyboard
   },
   {
     id: 'p3',
@@ -30,9 +30,10 @@ const mockProducts = [
     category: 'Monitors',
     price: 349.99,
     stock: 25,
-    image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=80&h=80&fit=crop&auto=format', // Monitor
+    image: 'https://images.unsplash.com/photo-1581349487760-6b9b06b17f76?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80', // Better monitor
   },
 ];
+
 
 
 const brands = Array.from(new Set(mockProducts.map((p) => p.brand)));
