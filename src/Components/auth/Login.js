@@ -167,7 +167,7 @@ const Login = () => {
 
         <div className="max-w-md w-full space-y-4 relative">
           {/* Login Form Card */}
-          <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-6 transform hover:scale-[1.01] transition-all duration-300">
+          <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 transform hover:scale-[1.01] transition-all duration-300 border border-gray-100">
             {/* Header */}
             <div className="text-center mb-4">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-[#5B45E0] to-[#4c39c7] mb-3 shadow-lg">
@@ -198,16 +198,17 @@ const Login = () => {
                     </div>
                     <input
                       id="email"
+                      name="email"
                       type="email"
+                      autoComplete="email"
                       required
-                      className="appearance-none block w-full pl-9 pr-3 py-2.5 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 bg-white text-sm"
-                      placeholder="Enter your email"
+                      className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm transition-all duration-200 bg-white/80 placeholder-gray-400"
+                      placeholder="you@email.com"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={e => setFormData({ ...formData, email: e.target.value })}
                     />
                   </div>
                 </div>
-
                 <div className="relative group">
                   <label htmlFor="password" className="block text-xs font-medium text-gray-700 mb-1">Password</label>
                   <div className="relative">
@@ -216,45 +217,42 @@ const Login = () => {
                     </div>
                     <input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
                       required
-                      className="appearance-none block w-full pl-9 pr-9 py-2.5 border border-gray-200 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 bg-white text-sm"
-                      placeholder="Enter your password"
+                      className="block w-full pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm transition-all duration-200 bg-white/80 placeholder-gray-400"
+                      placeholder="Password"
                       value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      onChange={e => setFormData({ ...formData, password: e.target.value })}
                     />
                     <button
                       type="button"
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                      onClick={() => setShowPassword(!showPassword)}
+                      tabIndex={-1}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-[#5B45E0] transition-colors"
+                      onClick={() => setShowPassword(v => !v)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
-                      ) : (
-                        <Eye className="h-4 w-4 text-gray-400 hover:text-gray-600 transition-colors" />
-                      )}
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
+              <div className="flex items-center justify-between mt-2">
+                <label className="flex items-center text-xs text-gray-600">
                   <input
-                    id="remember-me"
                     type="checkbox"
-                    className="h-3.5 w-3.5 text-[#5B45E0] border-gray-300 rounded focus:ring-[#5B45E0]"
                     checked={formData.rememberMe}
-                    onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
+                    onChange={e => setFormData({ ...formData, rememberMe: e.target.checked })}
+                    className="form-checkbox h-4 w-4 text-[#5B45E0] rounded focus:ring-[#5B45E0] border-gray-300"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-xs text-gray-700">
-                    Remember me
-                  </label>
-                </div>
+                  <span className="ml-2">Remember me</span>
+                </label>
                 <button
                   type="button"
-                  onClick={() => navigate('/forgot-password')}
-                  className="text-xs font-medium text-[#5B45E0] hover:text-[#4c39c7] transition-colors"
+                  className="text-xs text-[#5B45E0] hover:underline font-medium"
+                  onClick={() => alert('Forgot password?')}
                 >
                   Forgot password?
                 </button>
@@ -262,59 +260,34 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-[#5B45E0] to-[#4c39c7] hover:from-[#4c39c7] hover:to-[#5B45E0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200 transform hover:scale-[1.02] group shadow-lg"
+                className="w-full py-2.5 mt-2 bg-gradient-to-r from-[#5B45E0] to-[#4c39c7] text-white font-semibold rounded-lg shadow-lg hover:from-[#4c39c7] hover:to-[#5B45E0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all text-base"
               >
-                <span className="mr-2">Login</span>
+                Sign In
               </button>
 
-              <div className="mt-4">
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
-                  </div>
-                  <div className="relative flex justify-center text-xs">
-                    <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                  </div>
-                </div>
+              {/* Divider */}
+              <div className="flex items-center my-4">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="mx-3 text-xs text-gray-400">or</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
 
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  <button
-                    type="button"
-                    className="w-full inline-flex justify-center items-center py-2 px-3 border border-gray-200 rounded-lg shadow-sm bg-white text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200 transform hover:scale-[1.02] group"
-                  >
-                    <img
-                      className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform"
-                      src="https://www.svgrepo.com/show/475656/google-color.svg"
-                      alt="Google logo"
-                    />
-                    Google
-                  </button>
-                  <button
-                    type="button"
-                    className="w-full inline-flex justify-center items-center py-2 px-3 border border-gray-200 rounded-lg shadow-sm bg-white text-xs font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200 transform hover:scale-[1.02] group"
-                  >
-                    <img
-                      className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform"
-                      src="https://www.svgrepo.com/show/475647/facebook-color.svg"
-                      alt="Facebook logo"
-                    />
-                    Facebook
-                  </button>
-                </div>
+              {/* Google Login Button */}
+              <button
+                type="button"
+                className="w-full flex items-center justify-center gap-2 py-2.5 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-all text-sm font-medium text-gray-700"
+                onClick={() => alert('Google login coming soon!')}
+              >
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />
+                Sign in with Google
+              </button>
+
+              {/* Sign up prompt */}
+              <div className="text-center mt-4 text-sm text-gray-500">
+                Don&apos;t have an account?{' '}
+                <a href="#" className="text-[#5B45E0] font-medium hover:underline">Sign up</a>
               </div>
             </form>
-
-            <div className="mt-4 text-center">
-              <p className="text-xs text-gray-600">
-                Don't have an account?{' '}
-                <button
-                  onClick={() => navigate('/register')}
-                  className="font-medium text-[#5B45E0] hover:text-[#4c39c7] transition-colors"
-                >
-                  Create an account
-                </button>
-              </p>
-            </div>
           </div>
 
           {/* Trust Badges */}

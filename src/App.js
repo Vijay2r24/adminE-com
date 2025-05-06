@@ -6,7 +6,7 @@ import Dashboard from './Components/dashboard/Dashboard';
 import Users from './Components/pages/Users';
 import Orders from './Components/browse/OrderList';
 import AddUser from './Components/pages/AddUser';
-import ProductList from './Components/browse/Products/ProductList';
+import ProductList from './Components/pages/ProductList';
 import Addproduct from './Components/browse/Products/AddProductForm'
 import ProfileDetails from './Components/ProfileDetails';
 import Stores from './Components/pages/Stores';

@@ -29,8 +29,7 @@ const Browse = () => {
   ];
 
   return (
-    <div className="p-4 sm:p-6 min-h-screen bg-gray-50">
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 py-2">
       {/* Header and Button */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div>
@@ -93,7 +92,7 @@ const Browse = () => {
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </div>
+ 
   </div>
   
   );
