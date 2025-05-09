@@ -54,17 +54,12 @@ const CreateAttributeType = ({ onBack }) => {
         >
             <ArrowRight className="h-5 w-5" />
         </button>
-        <h2 className="text-lg font-medium text-gray-900">Create Attribute Type</h2>
+        <h2 className="text-xl font-bold text-gray-900">Create Attribute Type</h2>
       </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">Attribute Type Information</h3>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col md:flex-row md:space-x-4">
           {/* Name */}
-          <div>
+          <div className="w-full md:w-1/2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
               Name
             </label>
@@ -72,15 +67,15 @@ const CreateAttributeType = ({ onBack }) => {
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Tag className="h-5 w-5 text-gray-400 group-hover:text-[#5B45E0] transition-colors duration-200" />
               </div>
-            <input
-              type="text"
+              <input
+                type="text"
                 id="name"
-              name="name"
+                name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 className={`w-full pl-12 pr-4 py-3 border ${errors.name ? 'border-red-300' : 'border-gray-200'} rounded-xl focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 group-hover:border-[#5B45E0] bg-white shadow-sm`}
-              placeholder="Enter attribute type name"
-            />
+                placeholder="Enter attribute type name"
+              />
               {errors.name && (
                 <p className="mt-1.5 text-sm text-red-600 flex items-center">
                   <span className="mr-1">⚠️</span>
@@ -89,9 +84,8 @@ const CreateAttributeType = ({ onBack }) => {
               )}
             </div>
           </div>
-
           {/* Data Type */}
-          <div>
+          <div className="w-full md:w-1/2 mt-4 md:mt-0">
             <label htmlFor="dataType" className="block text-sm font-medium text-gray-700 mb-2">
               Data Type
             </label>
@@ -125,9 +119,10 @@ const CreateAttributeType = ({ onBack }) => {
               )}
             </div>
           </div>
-
+        </div>
+        <div className="flex flex-col md:flex-row md:space-x-4">
           {/* Validation Rules */}
-          <div>
+          <div className="w-full md:w-1/2">
             <label htmlFor="validation" className="block text-sm font-medium text-gray-700 mb-2">
               Validation Rules
             </label>
@@ -149,9 +144,8 @@ const CreateAttributeType = ({ onBack }) => {
               </p>
             </div>
           </div>
-
           {/* Description */}
-          <div>
+          <div className="w-full md:w-1/2 mt-4 md:mt-0">
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
               Description
             </label>
@@ -159,56 +153,53 @@ const CreateAttributeType = ({ onBack }) => {
               <div className="absolute top-3 left-3 pointer-events-none">
                 <Info className="h-5 w-5 text-gray-400 group-hover:text-[#5B45E0] transition-colors duration-200" />
               </div>
-            <textarea
-              id="description"
-              name="description"
+              <textarea
+                id="description"
+                name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-              rows={3}
+                rows={3}
                 className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 group-hover:border-[#5B45E0] bg-white shadow-sm resize-none"
-              placeholder="Enter attribute type description"
-            />
-            </div>
-          </div>
-
-          {/* Required Checkbox */}
-          <div className="flex items-start">
-            <div className="flex items-center h-5">
-              <input
-                id="required"
-                name="required"
-                type="checkbox"
-                checked={formData.required}
-                onChange={handleInputChange}
-                className="h-4 w-4 text-[#5B45E0] border-gray-300 rounded focus:ring-[#5B45E0]"
+                placeholder="Enter attribute type description"
               />
             </div>
-            <div className="ml-3 text-sm">
-              <label htmlFor="required" className="font-medium text-gray-700">
-                Required
+          </div>
+        </div>
+        {/* Required Checkbox and Form Actions remain full width */}
+        <div className="flex items-start">
+          <div className="flex items-center h-5">
+            <input
+              id="required"
+              name="required"
+              type="checkbox"
+              checked={formData.required}
+              onChange={handleInputChange}
+              className="h-4 w-4 text-[#5B45E0] border-gray-300 rounded focus:ring-[#5B45E0]"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="required" className="font-medium text-gray-700">
+              Required
             </label>
-              <p className="text-gray-500">Make this attribute type required for all products</p>
-            </div>
+            <p className="text-gray-500">Make this attribute type required for all products</p>
           </div>
-
-          {/* Form Actions */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-            <button
-              type="button"
-              onClick={onBack}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#5B45E0] hover:bg-[#4c39c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
-            >
-              Create Attribute Type
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+          <button
+            type="button"
+            onClick={onBack}
+            className="px-4 py-2.5 border border-gray-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#5B45E0] hover:bg-[#4c39c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
+          >
+            Create Attribute Type
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

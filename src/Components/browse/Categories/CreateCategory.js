@@ -71,17 +71,12 @@ const CreateCategory = ({ onBack }) => {
         >
             <ArrowRight className="h-5 w-5" />
         </button>
-        <h2 className="text-lg font-medium text-gray-900">Create Category</h2>
+        <h2 className="text-xl font-bold text-gray-900">Create Category</h2>
       </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-white border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">Category Information</h3>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="flex flex-col md:flex-row md:space-x-4">
           {/* Category Name */}
-          <div>
+          <div className="w-full md:w-1/2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
               Category Name
             </label>
@@ -106,9 +101,8 @@ const CreateCategory = ({ onBack }) => {
               )}
             </div>
           </div>
-
           {/* Parent Category */}
-          <div>
+          <div className="w-full md:w-1/2 mt-4 md:mt-0">
             <label htmlFor="parentCategory" className="block text-sm font-medium text-gray-700 mb-2">
               Parent Category
             </label>
@@ -135,9 +129,10 @@ const CreateCategory = ({ onBack }) => {
               </div>
             </div>
           </div>
-
+        </div>
+        <div className="flex flex-col md:flex-row md:space-x-4">
           {/* Category Image */}
-          <div>
+          <div className="w-full md:w-1/2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Category Image
             </label>
@@ -187,9 +182,8 @@ const CreateCategory = ({ onBack }) => {
               </div>
             </div>
           </div>
-
           {/* Status */}
-          <div>
+          <div className="w-full md:w-1/2 mt-4 md:mt-0">
             <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
               Status
             </label>
@@ -214,46 +208,44 @@ const CreateCategory = ({ onBack }) => {
               </div>
             </div>
           </div>
-
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <div className="relative group">
-              <div className="absolute top-3 left-3 pointer-events-none">
-                <Info className="h-5 w-5 text-gray-400 group-hover:text-[#5B45E0] transition-colors duration-200" />
-              </div>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 group-hover:border-[#5B45E0] bg-white shadow-sm resize-none"
-                placeholder="Enter category description"
-              />
+        </div>
+        {/* Description */}
+        <div>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            Description
+          </label>
+          <div className="relative group">
+            <div className="absolute top-3 left-3 pointer-events-none">
+              <Info className="h-5 w-5 text-gray-400 group-hover:text-[#5B45E0] transition-colors duration-200" />
             </div>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              rows={3}
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#5B45E0] focus:border-[#5B45E0] transition-all duration-200 group-hover:border-[#5B45E0] bg-white shadow-sm min-h-[80px]"
+              placeholder="Enter category description"
+            />
           </div>
-
-          {/* Form Actions */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-            <button
-              type="button"
-              onClick={onBack}
-              className="px-4 py-2.5 border border-gray-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#5B45E0] hover:bg-[#4c39c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
-            >
-              Create Category
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+        {/* Form Actions */}
+        <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+          <button
+            type="button"
+            onClick={onBack}
+            className="px-4 py-2.5 border border-gray-200 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2.5 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#5B45E0] hover:bg-[#4c39c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5B45E0] transition-all duration-200"
+          >
+            Create Category
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

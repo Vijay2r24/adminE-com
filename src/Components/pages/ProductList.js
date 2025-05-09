@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Search, Plus, MoreVertical, Edit, Trash } from 'lucide-react';
+import { Search, Plus, MoreVertical, Edit, Trash, LayoutGrid, List } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { FaSmile, FaShoppingBag, FaChartPie, FaComments, FaUsers, FaCog, FaPowerOff } from "react-icons/fa";
+
 
 const mockProducts = [
   {
@@ -65,6 +67,9 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
   const navigate = useNavigate();
 
   const handleEdit = (productId) => {
@@ -85,132 +90,287 @@ const ProductList = () => {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Reset to page 1 when filters/search change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedStatus]);
+
   const categories = Array.from(new Set(mockProducts.map(product => product.category)));
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Products</h1>
-          <p className="text-gray-500">Manage your products and inventory</p>
+  return (  
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 min-h-screen bg-gray-50">
+        {/* Header: Products heading and Add Product in one row */}
+        <div className="mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl font-bold text-gray-900">Products</h1>
+              <p className="mt-1 text-sm text-gray-500">Manage your products and inventory</p>
+            </div>
+            <button
+              onClick={() => navigate('/Addproduct')}
+              className="inline-flex items-center px-4 py-2 border border-indigo-600 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 gap-2 shadow-sm"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Add Product
+            </button>
+          </div>
         </div>
-        <button
-          onClick={() => navigate('/Addproduct')}
-          className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add Product
-        </button>
-      </div>
 
-      {/* Filters and Search */}
-      <div className="bg-white rounded-lg shadow mb-6">
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex flex-col gap-4">
+        {/* Action Bar: Search, Filters, Grid/Table Toggle */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+            {/* Search */}
             <div className="flex-1">
-              <div className="relative">
+              <div className="relative h-full">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-full"
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <select
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={selectedCategory}
-                onChange={e => setSelectedCategory(e.target.value)}
+            {/* Category Filter */}
+            <select
+              className="block w-full sm:w-48 px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              value={selectedCategory}
+              onChange={e => setSelectedCategory(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {categories.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+            {/* Status Filter */}
+            <select
+              className="block w-full sm:w-40 px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              value={selectedStatus}
+              onChange={e => setSelectedStatus(e.target.value)}
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+              <option value="out-of-stock">Out of Stock</option>
+            </select>
+            {/* Grid/Table View Toggle Button */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setViewMode('table')}
+                className={`inline-flex items-center px-3 py-2 border rounded-lg text-sm font-medium ${viewMode === 'table' ? 'border-indigo-600 text-indigo-600 bg-indigo-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                title="Table View"
               >
-                <option value="">All Categories</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-              <select
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={selectedStatus}
-                onChange={e => setSelectedStatus(e.target.value)}
+                <List className="w-4 h-4 mr-1" />
+                Table
+              </button>
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`inline-flex items-center px-3 py-2 border rounded-lg text-sm font-medium ${viewMode === 'grid' ? 'border-indigo-600 text-indigo-600 bg-indigo-50' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
+                title="Grid View"
               >
-                <option value="">All Status</option>
-                <option value="active">Active</option>
-                <option value="draft">Draft</option>
-                <option value="out-of-stock">Out of Stock</option>
-              </select>
+                <LayoutGrid className="w-4 h-4 mr-1" />
+                Grid
+              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Products List */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredProducts.map(product => (
-                <tr key={product.id} className="hover:bg-gray-50">
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="h-10 w-10 flex-shrink-0">
-                        <img className="h-10 w-10 rounded object-cover" src={product.image} alt={product.name} />
-                      </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                        <div className="text-sm text-gray-500 truncate max-w-xs">{product.description}</div>
-                      </div>
+        {/* Products List: Table or Grid View */}
+        {viewMode === 'table' ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th className="px-4 sm:px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {paginatedProducts.map(product => (
+                    <tr key={product.id} className="hover:bg-gray-50">
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="h-10 w-10 flex-shrink-0">
+                            <img className="h-10 w-10 rounded object-cover" src={product.image} alt={product.name} />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                            <div className="text-sm text-gray-500 truncate max-w-xs">{product.description}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category}</td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.price.toFixed(2)}</td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.stock}</td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(product.status)}`}>
+                          {product.status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        </span>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button onClick={() => handleEdit(product.id)} className="text-gray-400 hover:text-indigo-600" title="Edit">
+                            <Edit className="h-5 w-5" />
+                          </button>
+                          <button onClick={() => handleDelete(product.id)} className="text-gray-400 hover:text-red-600" title="Delete">
+                            <Trash className="h-5 w-5" />
+                          </button>
+                          <button className="text-gray-400 hover:text-gray-500" title="More">
+                            <MoreVertical className="h-5 w-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {paginatedProducts.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="py-8 text-center text-gray-500">
+                        No products found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {/* Pagination Section */}
+            <div className="px-6 py-4 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-500">
+                  Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredProducts.length)}</span> of{' '}
+                  <span className="font-medium">{filteredProducts.length}</span> results
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    className="px-3 py-1 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  {[...Array(totalPages)].map((_, idx) => (
+                    <button
+                      key={idx + 1}
+                      className={`px-3 py-1 border rounded-md text-sm font-medium ${currentPage === idx + 1 ? 'bg-indigo-600 text-white border-indigo-600' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+                      onClick={() => handlePageClick(idx + 1)}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+                  <button
+                    className="px-3 py-1 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Grid View
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {paginatedProducts.map(product => (
+                <div key={product.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex flex-col gap-4 hover:shadow-lg transition-shadow duration-200">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-semibold px-3 py-1 rounded-full border bg-gray-50 text-gray-700 border-gray-200">
+                      {product.name}
                     </div>
-                  </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category}</td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">${product.price.toFixed(2)}</td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.stock}</td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(product.status)}`}>
-                      {product.status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                    </span>
-                  </td>
-                  <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button onClick={() => handleEdit(product.id)} className="text-gray-400 hover:text-indigo-600" title="Edit">
-                        <Edit className="h-5 w-5" />
-                      </button>
-                      <button onClick={() => handleDelete(product.id)} className="text-gray-400 hover:text-red-600" title="Delete">
-                        <Trash className="h-5 w-5" />
-                      </button>
-                      <button className="text-gray-400 hover:text-gray-500" title="More">
-                        <MoreVertical className="h-5 w-5" />
-                      </button>
+                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(product.status)}`}>{product.status.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
+                  </div>
+                  <div className="flex items-center gap-4 mt-2">
+                    <div className="flex-shrink-0 h-16 w-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                      <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
                     </div>
-                  </td>
-                </tr>
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                      <div className="text-xs text-gray-500 line-clamp-2 max-w-[180px]">{product.description}</div>
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-900 mt-2">
+                    <span className="font-medium">Category:</span> {product.category}
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="text-sm text-gray-500">Stock: <span className="font-semibold text-gray-900">{product.stock}</span></div>
+                    <div className="text-lg font-bold text-indigo-600">${product.price.toFixed(2)}</div>
+                  </div>
+                  <div className="flex items-center justify-end gap-2 mt-2">
+                    <button onClick={() => handleEdit(product.id)} className="text-gray-400 hover:text-indigo-600" title="Edit">
+                      <Edit className="h-5 w-5" />
+                    </button>
+                    <button onClick={() => handleDelete(product.id)} className="text-gray-400 hover:text-red-600" title="Delete">
+                      <Trash className="h-5 w-5" />
+                    </button>
+                    <button className="text-gray-400 hover:text-gray-500" title="More">
+                      <MoreVertical className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
               ))}
-              {filteredProducts.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="py-8 text-center text-gray-500">
-                    No products found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            </div>
+            {/* Pagination Section for Grid View */}
+            <div className="px-6 py-4 border-t border-gray-100 mt-6">
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-gray-500">
+                  Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredProducts.length)}</span> of{' '}
+                  <span className="font-medium">{filteredProducts.length}</span> results
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    className="px-3 py-1 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  {[...Array(totalPages)].map((_, idx) => (
+                    <button
+                      key={idx + 1}
+                      className={`px-3 py-1 border rounded-md text-sm font-medium ${currentPage === idx + 1 ? 'bg-indigo-600 text-white border-indigo-600' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+                      onClick={() => handlePageClick(idx + 1)}
+                    >
+                      {idx + 1}
+                    </button>
+                  ))}
+                  <button
+                    className="px-3 py-1 border border-gray-200 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
-    </div>
   );
 };
 

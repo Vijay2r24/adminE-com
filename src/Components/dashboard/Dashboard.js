@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   TrendingUp, 
   ShoppingCart, 
@@ -40,7 +40,7 @@ const Dashboard = () => {
       color: 'bg-purple-100 text-purple-600'
     },
     {
-      title: 'Average Order Value',
+      title: 'Average Order',
       value: '$89.50',
       change: '-2.4%',
       trend: 'down',
@@ -90,21 +90,24 @@ const Dashboard = () => {
       sales: 245,
       revenue: '$24,500',
       rating: 4.8,
-      stock: 45
+      stock: 45,
+      image: 'https://images.pexels.com/photos/3394665/pexels-photo-3394665.jpeg?auto=compress&cs=tinysrgb&w=300'
     },
     {
       name: 'Smart Watch',
       sales: 189,
       revenue: '$18,900',
       rating: 4.6,
-      stock: 32
+      stock: 32,
+      image: 'https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=300'
     },
     {
       name: 'Laptop Backpack',
       sales: 156,
       revenue: '$7,800',
       rating: 4.9,
-      stock: 28
+      stock: 28,
+      image: 'https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=300'
     }
   ];
 
@@ -126,11 +129,19 @@ const Dashboard = () => {
     }
   ];
 
+  const [topProductsPage, setTopProductsPage] = useState(1);
+  const PRODUCTS_PER_PAGE = 3;
+  const totalTopProductsPages = Math.ceil(topProducts.length / PRODUCTS_PER_PAGE);
+  const paginatedTopProducts = topProducts.slice(
+    (topProductsPage - 1) * PRODUCTS_PER_PAGE,
+    topProductsPage * PRODUCTS_PER_PAGE
+  );
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 py-2">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2">
       {/* Header */}
       <div className="mb-4">
-        <h1 className="text-2xl font-bold text-gray-900">E-commerce Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
         <p className="mt-1 text-sm text-gray-500">
           Overview of your store's performance and recent activity
         </p>
@@ -167,70 +178,116 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Recent Orders */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div className="mb-6 md:mb-0">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col">
             <div className="px-6 py-4 border-b border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900">Recent Orders</h2>
             </div>
-            <div className="divide-y divide-gray-100">
-              {recentOrders.map((order) => (
-                <div key={order.id} className="px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{order.id}</p>
-                      <p className="text-sm text-gray-500">{order.customer}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900">{order.amount}</p>
-                      <p className="text-sm text-gray-500">{order.date}</p>
-                    </div>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {order.status}
-                    </span>
-                    <span className="text-sm text-gray-500">{order.items} items</span>
-                  </div>
-                </div>
-              ))}
+            <div className="flex-1 w-full overflow-x-auto">
+              <table className="w-full min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0 z-10">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider align-middle">Customer</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider align-middle">Order ID</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider align-middle">Amount</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider align-middle">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {recentOrders.map((order) => (
+                    <tr key={order.id} className="hover:bg-gray-50 transition h-12">
+                      <td className="px-4 py-3 align-middle whitespace-nowrap">
+                        <span className="inline-block align-middle h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-sm text-center leading-8 mr-2" style={{minWidth: '2rem'}}>
+                          {order.customer.split(' ').map(n => n[0]).join('')}
+                        </span>
+                        <span className="inline-block align-middle text-sm text-gray-900 max-w-[8rem] truncate">{order.customer}</span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700 align-middle whitespace-nowrap">{order.id}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900 text-right align-middle whitespace-nowrap">{order.amount}</td>
+                      <td className="px-4 py-3 align-middle whitespace-nowrap">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold 
+                          ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' : ''}
+                          ${order.status === 'Processing' ? 'bg-yellow-100 text-yellow-700' : ''}
+                          ${order.status === 'Shipped' ? 'bg-blue-100 text-blue-700' : ''}
+                          ${order.status === 'Pending' ? 'bg-gray-100 text-gray-700' : ''}
+                        `}>
+                          {order.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
         {/* Top Products */}
         <div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col mt-6 md:mt-0">
             <div className="px-6 py-4 border-b border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900">Top Products</h2>
             </div>
-            <div className="divide-y divide-gray-100">
-              {topProducts.map((product, index) => (
-                <div key={index} className="px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{product.name}</p>
-                      <div className="mt-1 flex items-center">
-                        <Star className="h-4 w-4 text-yellow-400" />
-                        <span className="ml-1 text-sm text-gray-500">{product.rating}</span>
-                      </div>
+            <div className="flex flex-col gap-3 p-4 flex-1">
+              {paginatedTopProducts.map((product, index) => (
+                <div key={index} className="flex flex-col md:flex-row items-center bg-white rounded-lg shadow-sm px-4 py-3 hover:shadow-md transition min-h-[80px]">
+                  {/* Product Image */}
+                  <div className="flex-shrink-0 mb-2 md:mb-0 md:mr-4">
+                    <img
+                      src={product.image || 'https://via.placeholder.com/48x48?text=Img'}
+                      alt={product.name}
+                      className="h-12 w-12 rounded object-cover border"
+                    />
+                  </div>
+                  {/* Product Info */}
+                  <div className="flex-1 min-w-0 w-full">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-gray-900 truncate max-w-[10rem]">{product.name}</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">{product.category || 'General'}</span>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium text-gray-900">{product.revenue}</p>
-                      <p className="text-sm text-gray-500">{product.sales} sales</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {[1,2,3,4,5].map(star => (
+                        <Star key={star} className={`h-4 w-4 ${product.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`} fill={product.rating >= star ? '#facc15' : 'none'} />
+                      ))}
+                      <span className="ml-1 text-xs text-gray-500">{product.rating}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-4 mt-1 text-xs text-gray-500">
+                      <span className="flex items-center"><DollarSign className="inline h-4 w-4 mr-1 text-green-400" />{product.revenue}</span>
+                      <span className="flex items-center"><TrendingUp className="inline h-4 w-4 mr-1 text-blue-400" />{product.sales} sales</span>
+                      <span className="flex items-center"><Package className="inline h-4 w-4 mr-1 text-gray-400" />{product.stock} in stock</span>
+                      {product.stock < 10 && (
+                        <span className="ml-2 px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700">Low</span>
+                      )}
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <div className="flex items-center">
-                      <Package className="h-4 w-4 text-gray-400" />
-                      <span className="ml-2 text-sm text-gray-500">
-                        {product.stock} in stock
-                      </span>
-                    </div>
+                  {/* Actions */}
+                  <div className="w-full md:w-auto mt-2 md:mt-0 md:ml-4 flex flex-col items-end gap-2">
+                    <button className="w-full md:w-auto px-3 py-1 rounded bg-indigo-600 text-white text-xs font-medium hover:bg-indigo-700 transition">View</button>
                   </div>
                 </div>
               ))}
+            </div>
+            {/* Pagination Controls */}
+            <div className="flex justify-center items-center gap-4 px-6 py-2 border-t border-gray-100 bg-gray-50">
+              <button
+                className="px-3 py-1 rounded bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 transition disabled:opacity-50"
+                onClick={() => setTopProductsPage(p => Math.max(1, p - 1))}
+                disabled={topProductsPage === 1}
+              >
+                Previous
+              </button>
+              <span className="text-xs text-gray-500">
+                Page {topProductsPage} of {totalTopProductsPages}
+              </span>
+              <button
+                className="px-3 py-1 rounded bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 transition disabled:opacity-50"
+                onClick={() => setTopProductsPage(p => Math.min(totalTopProductsPages, p + 1))}
+                disabled={topProductsPage === totalTopProductsPages}
+              >
+                Next
+              </button>
             </div>
           </div>
 

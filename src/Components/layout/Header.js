@@ -38,13 +38,6 @@ const Header = ({ onMenuClick }) => {
     <header className="sticky top-0 z-10 bg-white border-b border-gray-100">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         <div className="flex items-center flex-1">
-          <button
-            onClick={onMenuClick}
-            className="lg:hidden mr-4 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-          >
-            <Menu className="h-6 w-6 text-gray-600" />
-          </button>
-
           <div className="flex-1 max-w-lg">
             <div className="relative">
               <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -57,7 +50,7 @@ const Header = ({ onMenuClick }) => {
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative flex items-center gap-4">
           <button
             ref={bellRef}
             className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg"
@@ -102,6 +95,18 @@ const Header = ({ onMenuClick }) => {
               </div>
             </div>
           )}
+          {/* User Profile in Header */}
+          <div className="flex items-center gap-2 pl-4 border-l border-gray-200 ml-4">
+            <img
+              className="h-10 w-10 rounded-full border-2 border-gray-200"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt="Profile"
+            />
+            <div className="hidden sm:block">
+              <div className="text-sm font-medium text-gray-900">John Doe</div>
+              <div className="text-xs text-gray-500">admin</div>
+            </div>
+          </div>
         </div>
       </div>
     </header>

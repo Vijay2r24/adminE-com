@@ -1,9 +1,20 @@
 import React from 'react';
 import Card from '../ui/Card';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const BrandCreate = () => {
+  const navigate = useNavigate();
   return (
     <Card>
+      <button
+        type="button"
+        className="mb-4 flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+        onClick={() => navigate('/browse/brands')}
+      >
+        <ArrowLeft className="h-5 w-5 mr-1" />
+        Back to Brand List
+      </button>
       <form className="space-y-6">
         <div>
           <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Brand</h3>

@@ -13,6 +13,7 @@ import Stores from './Components/pages/Stores';
 import AddStore from './Components/pages/AddStore';
 import Notifications from './Components/pages/Notifications';
 import Login from './Components/auth/Login';
+import EditProfile from './Components/pages/EditProfile';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

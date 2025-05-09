@@ -25,7 +25,7 @@ const defaultUser = {
   state: "Not provided",
   zipCode: "Not provided",
   joinDate: new Date().toISOString(),
-  avatar: "https://via.placeholder.com/150",
+  avatar: "C:/Users/Vijay Kumar Balam/Desktop/adminE-com/src/assets/images/che-guevara.jpg",
   role: "Guest"
 };
 

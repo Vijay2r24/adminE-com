@@ -9,9 +9,9 @@ const BrandList = () => {
   const [statusFilter, setStatusFilter] = useState('');
 
   const [brands] = useState([
-    { id: 1, name: 'Nike', logo: 'nike.png', status: 'Active', products: 150 },
-    { id: 2, name: 'Adidas', logo: 'adidas.png', status: 'Active', products: 120 },
-    { id: 3, name: 'Puma', logo: 'puma.png', status: 'Inactive', products: 80 },
+    { id: 1, name: 'Nike', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg', status: 'Active', products: 150 },
+    { id: 2, name: 'Adidas', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg', status: 'Active', products: 120 },
+    { id: 3, name: 'Puma', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Puma_logo.svg', status: 'Inactive', products: 80 },
   ]);
 
   const filteredBrands = brands.filter(brand =>
@@ -110,11 +110,13 @@ const BrandList = () => {
                     <div className="text-sm font-medium text-gray-900">{brand.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <img
-                      src={brand.logo}
-                      alt={brand.name}
-                      className="h-8 w-8 rounded-full"
-                    />
+                    <div className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-gray-200 overflow-hidden">
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className="max-w-[70%] max-h-[70%] object-contain"
+                      />
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{brand.products}</div>

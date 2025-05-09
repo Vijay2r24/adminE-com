@@ -1,20 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { User, Mail, Phone, MapPin, Calendar, Edit, Camera, Shield, Bell, Globe, Lock, Key } from 'lucide-react';
-
-interface ProfileDetailsProps {
-  user?: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    joinDate: string;
-    avatar: string;
-    role: string;
-  };
-}
+import { useNavigate } from 'react-router-dom';
+import EditProfileModal from './EditProfileModal';
+import cheGuevaraImg from '../assets/images/che-guevara.jpg';
 
 const defaultUser = {
   name: "Guest User",
@@ -25,11 +13,60 @@ const defaultUser = {
   state: "Not provided",
   zipCode: "Not provided",
   joinDate: new Date().toISOString(),
-  avatar: "https://via.placeholder.com/150",
+  avatar: cheGuevaraImg,
   role: "Guest"
 };
 
-const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
+const securityPrefModals = {
+  'changePassword': {
+    title: 'Change Password',
+    content: (
+      <form className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+          <input type="password" className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm" placeholder="Enter current password" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+          <input type="password" className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm" placeholder="Enter new password" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+          <input type="password" className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm" placeholder="Confirm new password" />
+        </div>
+        <div className="flex justify-end gap-2 mt-4">
+          <button type="button" className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-medium" onClick={null}>Cancel</button>
+          <button type="submit" className="px-4 py-2 rounded-lg bg-gradient-to-r from-sky-500 to-indigo-500 text-white font-medium hover:from-sky-400 hover:to-indigo-400 border border-sky-400/20">Save</button>
+        </div>
+      </form>
+    )
+  },
+  'twoFactor': {
+    title: 'Two-Factor Authentication',
+    content: <div className="py-4">Two-factor authentication settings coming soon.</div>
+  },
+  'privacy': {
+    title: 'Privacy Settings',
+    content: <div className="py-4">Privacy settings coming soon.</div>
+  },
+  'notifications': {
+    title: 'Notification Settings',
+    content: <div className="py-4">Notification settings coming soon.</div>
+  },
+  'language': {
+    title: 'Language & Region',
+    content: <div className="py-4">Language & region settings coming soon.</div>
+  },
+};
+
+const ProfileDetails = ({ user = defaultUser }) => {
+  const navigate = useNavigate();
+  const [editOpen, setEditOpen] = useState(false);
+  const [modalType, setModalType] = useState(null);
+
+  const handleOpenModal = (type) => setModalType(type);
+  const handleCloseModal = () => setModalType(null);
+
   return (
     <div className="max-w-7xl mx-auto mt-5">
       {/* Header Section with Background */}
@@ -67,7 +104,10 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
               </p>
             </div>
             <div className="md:ml-auto">
-              <button className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-lg text-sm font-medium hover:from-sky-400 hover:to-indigo-400 transition-all duration-200 border border-sky-400/20">
+              <button 
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-lg text-sm font-medium hover:from-sky-400 hover:to-indigo-400 transition-all duration-200 border border-sky-400/20"
+                onClick={() => setEditOpen(true)}
+              >
                 <Edit className="h-4 w-4 mr-2" />
                 Edit Profile
               </button>
@@ -75,6 +115,23 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
           </div>
         </div>
       </div>
+      <EditProfileModal open={editOpen} onClose={() => setEditOpen(false)} user={user} />
+      {/* Security/Preferences Modal */}
+      {modalType && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 w-full max-w-md relative animate-fadeIn">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold"
+              onClick={handleCloseModal}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">{securityPrefModals[modalType].title}</h2>
+            {securityPrefModals[modalType].content}
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -170,7 +227,7 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
               <h2 className="text-lg font-semibold text-gray-900">Security Settings</h2>
             </div>
             <div className="p-6 space-y-4">
-              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
+              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group" onClick={() => handleOpenModal('changePassword')}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors duration-200">
                     <Key className="h-5 w-5 text-indigo-600" />
@@ -179,7 +236,7 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
                 </div>
                 <Edit className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
               </button>
-              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
+              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group" onClick={() => handleOpenModal('twoFactor')}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors duration-200">
                     <Shield className="h-5 w-5 text-indigo-600" />
@@ -188,7 +245,7 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
                 </div>
                 <Edit className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
               </button>
-              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
+              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group" onClick={() => handleOpenModal('privacy')}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors duration-200">
                     <Lock className="h-5 w-5 text-indigo-600" />
@@ -206,7 +263,7 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
               <h2 className="text-lg font-semibold text-gray-900">Preferences</h2>
             </div>
             <div className="p-6 space-y-4">
-              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
+              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group" onClick={() => handleOpenModal('notifications')}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors duration-200">
                     <Bell className="h-5 w-5 text-indigo-600" />
@@ -215,7 +272,7 @@ const ProfileDetails = ({ user = defaultUser }: ProfileDetailsProps) => {
                 </div>
                 <Edit className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
               </button>
-              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group">
+              <button className="w-full flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200 group" onClick={() => handleOpenModal('language')}>
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors duration-200">
                     <Globe className="h-5 w-5 text-indigo-600" />

@@ -10,12 +10,13 @@ const AddUser = () => {
     role: 'user',
     password: '',
     confirmPassword: '',
-    address: '',
+    streetAddress: '',
     city: '',
     state: '',
-    zipCode: '',
-    company: ''
+    pincode: ''
   });
+  const [profileImage, setProfileImage] = useState(null);
+  const [profileImagePreview, setProfileImagePreview] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,14 +26,29 @@ const AddUser = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setProfileImage(null);
+      setProfileImagePreview(null);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: Add API call to create user
-    console.log('Form submitted:', formData);
+    // TODO: Add API call to create user, including profileImage
+    console.log('Form submitted:', formData, profileImage);
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-4">
@@ -45,6 +61,27 @@ const AddUser = () => {
           <h1 className="text-2xl font-bold text-gray-900">Add New User</h1>
         </div>
         <p className="text-gray-500">Create a new user account with their details and permissions.</p>
+      </div>
+
+      {/* Profile Image Upload */}
+      <div className="flex items-center gap-6 mb-8">
+        <div>
+          <img
+            src={profileImagePreview || 'https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff'}
+            alt="Profile Preview"
+            className="h-20 w-20 rounded-full object-cover border"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Profile Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="block text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+          />
+          <p className="text-xs text-gray-400 mt-1">JPG, PNG, or GIF. Max 2MB.</p>
+        </div>
       </div>
 
       {/* Form */}
@@ -206,25 +243,40 @@ const AddUser = () => {
             <h2 className="text-lg font-semibold text-gray-900">Address Information</h2>
           </div>
           <div className="p-6 space-y-6">
-            <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
-                Street Address
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <MapPin className="h-5 w-5 text-gray-400" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="streetAddress" className="block text-sm font-medium text-gray-700 mb-1">
+                  Street Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <MapPin className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    id="streetAddress"
+                    name="streetAddress"
+                    value={formData.streetAddress}
+                    onChange={handleChange}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
+                  />
                 </div>
+              </div>
+              <div>
+                <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
+                  Pincode
+                </label>
                 <input
                   type="text"
-                  id="address"
-                  name="address"
-                  value={formData.address}
+                  id="pincode"
+                  name="pincode"
+                  value={formData.pincode}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
                 />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
                   City
@@ -249,37 +301,6 @@ const AddUser = () => {
                   value={formData.state}
                   onChange={handleChange}
                   className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
-                />
-              </div>
-              <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
-                  ZIP Code
-                </label>
-                <input
-                  type="text"
-                  id="zipCode"
-                  name="zipCode"
-                  value={formData.zipCode}
-                  onChange={handleChange}
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                Company
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Building className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#5B45E0] focus:border-[#5B45E0] sm:text-sm"
                 />
               </div>
             </div>
