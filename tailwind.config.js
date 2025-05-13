@@ -1,3 +1,5 @@
+const { Sidebar } = require('lucide-react/dist/cjs/lucide-react');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,7 +11,9 @@ module.exports = {
       colors: {
         "custom-blue1": "#00ACC1",
         "custom-pink": "#DA70D6",
-        "custom-indigo": "#7986CB",
+         "sidebar-bg":"#ffff",
+        "custom-bg": "#FF5A5F",//600 indigo
+        "bg-hover":"#4338ca",//700 indigo
         "custom-LavenderBlush": "#E6B7D2",
         "custom-Apricot": "#D35400",
         "custom-Apricot": "#D35400",
